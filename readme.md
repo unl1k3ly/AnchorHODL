@@ -73,3 +73,8 @@ If  these instructions are unclear, just Google "How to create a Telegram Bot an
 
 ## Support!
 - If you feel this project is the right one for you, please, donate to `terra1uwkfuh6crvlttqsj2rv0tjpl8v0dy3d4swayg7` if you feel like doing so.
+
+Thanks Terra and Anchor team!
+
+Cheers all!
+
