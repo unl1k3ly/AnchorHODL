@@ -66,4 +66,4 @@ If  these instructions are unclear, just Google "How to create a Telegram Bot an
 - https://github.com/RomainLanz/anchor-borrow-bot
 
 ## Support!
-- If you feel this project the right one for you, please, donate to `terra1uwkfuh6crvlttqsj2rv0tjpl8v0dy3d4swayg7` if you feel like doing so.
+- If you feel this project is the right one for you, please, donate to `terra1uwkfuh6crvlttqsj2rv0tjpl8v0dy3d4swayg7` if you feel like doing so.
