@@ -22,6 +22,12 @@ I've started this app due my own needs and to learn more about Terra's ecosystem
 
 ![installing](./imgs/download.gif)
 
+## Persistence mode
+1. Install gunicorn: `pip3 install gunicorn`
+2. `gunicorn -b 127.0.0.1:5000 webview:app --daemon`
+
+Done! gunicorn is running as daemon! 
+
 ## Screenshots 
 
 - You can run the script in your terminal in a tmux/screen session as per figure below:
