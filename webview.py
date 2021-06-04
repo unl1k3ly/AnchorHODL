@@ -39,6 +39,7 @@ def tail():
                 page_title = 'REPAYING ...'
         except IndexError:
             page_title = 'IndexError'
+            pass
 
         if os.path.exists('./logs/repay.log'):
             arguments = ['tail', '-n', '5', './logs/repay.log']
