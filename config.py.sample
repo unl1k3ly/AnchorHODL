@@ -13,7 +13,7 @@ NETWORK = 'MAINNET'
 NOTIFY_SLACK = False
 NOTIFY_TELEGRAM = True
 
-TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN', 'paste your access token here)
+TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN', 'paste your access token here')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', 'paste your chat id here')
 SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL', 'paste your webhook here')
 
