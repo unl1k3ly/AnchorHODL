@@ -24,9 +24,17 @@ I've started this app due my own needs and to learn more about Terra's ecosystem
 
 ## Persistence mode
 1. Install gunicorn: `pip3 install gunicorn`
-2. `gunicorn -b 127.0.0.1:5000 webview:app --daemon`
+2. Run `gunicorn -b 127.0.0.1:5000 webview:app --daemon`
 
 Done! gunicorn is running as daemon! 
+
+## Docker mode
+1. If you don't have Docker installed, grab if from <https://docs.docker.com/get-docker/>.
+2. Once installed, clone this repository by `git clone https://github.com/unl1k3ly/AnchorHODL`
+3. Rename `config.py.sample` to `config.py` and provide details.
+4. Build the image with `docker build -t AnchorHODL . ` 
+5. Run the image with `docker run -p 5000:5000 AnchorHODL:latest` or add `-d` if you want to run it as a daemon.
+6. Check if its working by `http://localhost:5000`
 
 ## Screenshots 
 
