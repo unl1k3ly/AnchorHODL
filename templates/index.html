@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
       <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-dark.min.css') }}" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}" />
 
 
     <title>{{ title }}</title>
@@ -19,21 +20,21 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
-                <a class="navbar-brand" href="https://github.com/unl1k3ly/AnchorHODL#support">⚓ AnchorHODL</a> <a class="nav-link" href="https://github.com/unl1k3ly/AnchorHODL#support" target="_blank">🌕  #Lunatic</a>
+                <a class="navbar-brand" href="https://github.com/unl1k3ly/AnchorHODL#support">⚓ AnchorHODL</a> <a class="nav-link" href="https://github.com/unl1k3ly/AnchorHODL#support" target="_blank">🌕  #LUNATIC</a>
             </div>
           </nav>
 
         <p></p>
         <div class="card">
             <div class="card-header border-success">
-                <strong>{{ title }}</strong> left until repay is triggered ...
+                <strong class="fs-5">{{ title }}</strong> <span class="text-success">left until repay is triggered ...</span>
             </div>
             <div class="card-body">
 <!--            <h5 class="card-title">Special title treatment</h5>-->
             <p class="card-text">
-                <ul>
+                <ul class="list-group list-group-flush">
                 {% for line in buffer_list: %}
-                <li>{{ line }}</li>
+                <li class="list-group-item text-white">{{ line }}</li>
                 {% endfor %}
             </ul>
                 </p>
@@ -41,12 +42,12 @@
         </div>
 
         <div class="card">
-            <div class="card-header border-success">TerraSwap Prices and bLuna <-> Luna Diff ...</div>
+            <div class="card-header border-success text-success">TerraSwap Prices and bLuna <-> Luna Diff ...</div>
             <div class="card-body">
                 <p class="card-text">
-                <ul>
+                <ul class="list-group list-group-flush">
                 {% for line in terraswap_prices: %}
-                <li>{{ line }}</li>
+                 <li class="list-group-item text-white">{{ line }}</li>
                 {% endfor %}
             </ul>
                 </p>
@@ -55,12 +56,12 @@
 
 
         <div class="card">
-        <div class="card-header border-success">Last {{ repay_list|length }} repays ...  </div>
+        <div class="card-header border-success text-success">Last {{ repay_list|length }} repays ...  </div>
             <div class="card-body">
             <p class="card-text">
-                <ul>
+                <ul class="list-group list-group-flush">
                 {% for line in repay_list: %}
-                <li>{{ line }}</li>
+                 <li class="list-group-item text-white">{{ line }}</li>
                 {% endfor %}
             </ul>
                 </p>
@@ -69,12 +70,12 @@
 
 
         <div class="card">
-            <div class="card-header border-success">Cron</div>
+            <div class="card-header border-success text-success">Cron</div>
             <div class="card-body">
                 <p class="card-text">
-                <ul>
+                <ul class="list-group list-group-flush">
                 {% for line in apscheduler_list: %}
-                <li>{{ line }}</li>
+                 <li class="list-group-item text-white">{{ line }}</li>
                 {% endfor %}
             </ul>
                 </p>
