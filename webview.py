@@ -54,7 +54,7 @@ def tail():
                     url = line.split()[-1]
                     hlink = url
                     line = line.split(' TX')[0]
-                except Exeption as err:
+                except Exception as err:
                     hlink = 'err'
                     line = 'err'
                     url = 'err'
