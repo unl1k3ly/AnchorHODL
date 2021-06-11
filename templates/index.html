@@ -61,7 +61,7 @@
             <p class="card-text">
                 <ul class="list-group list-group-flush">
                 {% for line in repay_list: %}
-                 <li class="list-group-item text-white">{{ line }}</li>
+                 <li class="list-group-item text-white">{{ line.line }} <a href="{{ line.hlink }}" target="_blank">🔗 TX</a></li>
                 {% endfor %}
             </ul>
                 </p>

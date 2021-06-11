@@ -37,8 +37,10 @@ def tail():
                 page_title = info_log[-1].split()[5].strip(',')
             elif 'REPAYING' in info_log[-1]:
                 page_title = 'REPAYING ...'
+            else:
+                page_title = '...'
         except IndexError:
-            page_title = 'IndexError'
+            page_title = '...'
             pass
 
         if os.path.exists('./logs/repay.log'):
@@ -48,7 +50,17 @@ def tail():
             for line in iter(process.stdout.readline, b''):
                 l = line.decode('utf-8')
                 line = l.strip()
-                repay_log.append(line)
+                try:
+                    url = line.split()[-1]
+                    hlink = url
+                    line = line.split(' TX')[0]
+                except Exeption as err:
+                    hlink = 'err'
+                    line = 'err'
+                    url = 'err'
+                    pass
+
+                repay_log.append({'line': line, 'hlink': hlink})
 
         if os.path.exists('./logs/apscheduler.log'):
             arguments = ['tail', '-n', '5', './logs/apscheduler.log']
