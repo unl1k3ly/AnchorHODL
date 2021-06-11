@@ -215,12 +215,12 @@ def keep_loan_safe():
             if config.NOTIFY_SLACK:
                 slack_msg = f"*Borrowed More!*\n\n_Borrowed amount:_ `${borrow_amount}`\n" \
                             f"_Triggered at:_ `{current_percent:.2%}`\n" \
-                            f"`{tx_look_up}{borrow_tx}`"
+                            f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
                 slack_webhook(slack_msg)
             if config.NOTIFY_TELEGRAM:
                 telegram_msg = f"*Borrowed More!*\n\n_Borrowed amount:_ `${borrow_amount}`\n" \
                             f"_Triggered at:_ `{current_percent:.2%}`\n" \
-                            f"`{tx_look_up}{borrow_tx}`"
+                            f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
                 telegram_notification(telegram_msg)
 
     else:
@@ -280,14 +280,14 @@ def keep_loan_safe():
                             f"_Triggered at:_ `{current_percent:.2%}`\n" \
                             f"_Borrow Limit trigger:_ `{config.trigger_at_percent}%`\n" \
                             f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
-                            f"`{tx_look_up}{loan_repay_tx}`"
+                            f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
                 slack_webhook(slack_msg)
             if config.NOTIFY_TELEGRAM:
                 telegram_msg = f"*Loan Repaid*\n\n_Repaid amount:_ `${repay_amount}`\n" \
                             f"_Triggered at:_ `{current_percent:.2%}`\n" \
                             f"_Borrow Limit trigger:_ `{config.trigger_at_percent}%`\n" \
                             f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
-                            f"`{tx_look_up}{loan_repay_tx}`"
+                            f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
                 telegram_notification(telegram_msg)
             return line
     else:
