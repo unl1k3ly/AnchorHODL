@@ -4,6 +4,11 @@ mnemonic = os.environ.get('MNEMONIC', 'paste your seed here')
 target_percent = 80
 trigger_at_percent = 85
 
+# setting to True increases transaction cost by 5 times, 
+# but can save you from being liquidated when network were congentioned 
+# when everyone were trying to pay off loan at the same time.
+repay_with_max_fee = False 
+
 # (True or False)
 enabled_auto_borrow = True
 auto_borrow_at_percent = 70
