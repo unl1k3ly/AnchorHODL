@@ -75,9 +75,6 @@ If  these instructions are unclear, just Google "How to create a Telegram Bot an
 - I'm happy to fix bugs or take merge requests.
 - If you intend to modify the code yourself, please do a fork and start from it !
 
-## Similar projects
-- https://github.com/ALPAC-4/auto_repay
-- https://github.com/RomainLanz/anchor-borrow-bot
 
 ## Support!
 - If you feel this project is the right one for you, please, donate to `terra1uwkfuh6crvlttqsj2rv0tjpl8v0dy3d4swayg7` if you feel like doing so.
@@ -85,4 +82,8 @@ If  these instructions are unclear, just Google "How to create a Telegram Bot an
 Thanks Terra and Anchor team!
 
 Cheers all!
+
+## Similar projects
+- https://github.com/ALPAC-4/auto_repay
+- https://github.com/RomainLanz/anchor-borrow-bot
 
