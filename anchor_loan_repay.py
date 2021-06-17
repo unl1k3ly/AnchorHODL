@@ -178,121 +178,128 @@ def check_tx_info(tx_hash):
 
     except LCDResponseError as err:
         base_logger.error(err)
+        pass
         # return str(err)
 
 
 def keep_loan_safe():
-    loan_details = getting_current_loan_percent()
-    current_percent = loan_details['current_percent']
-    loan_amount = loan_details['loan_amount']
-    anchor_deposited_amount = loan_details['total_deposited_amount']
-    left_to_trigger = loan_details['left_to_trigger']
-    target_percent = config.target_percent / 100
-    trigger_at_percent = config.trigger_at_percent / 100
+    try:
 
-    # Check of there is anything to pay before run it
-    if int(loan_amount) < 10:
-        line = "Hummm ... It seems there is nothing to repay!"
-        base_logger.warning(line)
-        return True
+        loan_details = getting_current_loan_percent()
+        current_percent = loan_details['current_percent']
+        loan_amount = loan_details['loan_amount']
+        anchor_deposited_amount = loan_details['total_deposited_amount']
+        left_to_trigger = loan_details['left_to_trigger']
+        target_percent = config.target_percent / 100
+        trigger_at_percent = config.trigger_at_percent / 100
 
-    # Check if we need to repay!
-    if left_to_trigger < 0:
-        run_stats = (f'REPAYING ... Left until trigger: {left_to_trigger}%, Current at: {current_percent:.2%},'
-                     f' Triggering at: {config.trigger_at_percent}%, Borrow Limit target: {config.target_percent}%.')
-        #  f' loan_amount: ${loan_amount:,.2f}, deposited_amount: ${anchor_deposited_amount:,.2f}, '
-        # print(line)
-        base_logger.info(run_stats)
+        # Check of there is anything to pay before run it
+        if int(loan_amount) < 10:
+            line = "Hummm ... It seems there is nothing to repay!"
+            base_logger.warning(line)
+            return True
 
-    # Check if we can borrow some more, if enabled ...
-    elif config.enabled_auto_borrow and current_percent < config.auto_borrow_at_percent / 100:
-        borrow_amount = int(((config.target_percent / 100) - current_percent) / current_percent * loan_amount)
-        run_stats = (f'BORROWING - Left until trigger: {left_to_trigger}%, Current at: {current_percent:.2%},'
-                     # f' loan_amount: ${loan_amount:,.2f}, deposited_amount: ${anchor_deposited_amount:,.2f}, '
-                     f' Triggering at: {config.trigger_at_percent}%, Borrow Limit target {config.target_percent}%.')
-        borrow_tx = borrow_ust_from_anchor(borrow_amount)
-        if borrow_tx:
-            if config.NOTIFY_SLACK:
-                slack_msg = f"*Borrowed More!*\n\n_Borrowed amount:_ `${borrow_amount}`\n" \
-                            f"_Triggered at:_ `{current_percent:.2%}`\n" \
-                            f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
-                slack_webhook(slack_msg)
-            if config.NOTIFY_TELEGRAM:
-                telegram_msg = f"*Borrowed More!*\n\n_Borrowed amount:_ `${borrow_amount}`\n" \
-                            f"_Triggered at:_ `{current_percent:.2%}`\n" \
-                            f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
-                telegram_notification(telegram_msg)
+        # Check if we need to repay!
+        if left_to_trigger < 0:
+            run_stats = (f'REPAYING ... Left until trigger: {left_to_trigger}%, Current at: {current_percent:.2%},'
+                         f' Triggering at: {config.trigger_at_percent}%, Borrow Limit target: {config.target_percent}%.')
+            #  f' loan_amount: ${loan_amount:,.2f}, deposited_amount: ${anchor_deposited_amount:,.2f}, '
+            # print(line)
+            base_logger.info(run_stats)
 
-    else:
-        run_stats = (f'Left until trigger: {left_to_trigger}%, Current at: {current_percent:.2%},'
-                     # f' loan_amount: ${loan_amount:,.2f}, deposited_amount: ${anchor_deposited_amount:,.2f}, '
-                     f' Triggering at: {config.trigger_at_percent}%, Borrow Limit target {config.target_percent}%.')
-        # print(line)
-        base_logger.info(run_stats)
+        # Check if we can borrow some more, if enabled ...
+        elif config.enabled_auto_borrow and current_percent < config.auto_borrow_at_percent / 100:
+            borrow_amount = int(((config.target_percent / 100) - current_percent) / current_percent * loan_amount)
+            run_stats = (f'BORROWING - Left until trigger: {left_to_trigger}%, Current at: {current_percent:.2%},'
+                         # f' loan_amount: ${loan_amount:,.2f}, deposited_amount: ${anchor_deposited_amount:,.2f}, '
+                         f' Triggering at: {config.trigger_at_percent}%, Borrow Limit target {config.target_percent}%.')
+            borrow_tx = borrow_ust_from_anchor(borrow_amount)
+            if borrow_tx:
+                if config.NOTIFY_SLACK:
+                    slack_msg = f"*Borrowed More!*\n\n_Borrowed amount:_ `${borrow_amount}`\n" \
+                                f"_Triggered at:_ `{current_percent:.2%}`\n" \
+                                f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
+                    slack_webhook(slack_msg)
+                if config.NOTIFY_TELEGRAM:
+                    telegram_msg = f"*Borrowed More!*\n\n_Borrowed amount:_ `${borrow_amount}`\n" \
+                                f"_Triggered at:_ `{current_percent:.2%}`\n" \
+                                f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
+                    telegram_notification(telegram_msg)
 
-    # If current_percent is bigger than trigger_at_percent, it means we need to repay!
-    if current_percent > trigger_at_percent:
-        repay_amount = int((current_percent - target_percent) / current_percent * loan_amount)
+        else:
+            run_stats = (f'Left until trigger: {left_to_trigger}%, Current at: {current_percent:.2%},'
+                         # f' loan_amount: ${loan_amount:,.2f}, deposited_amount: ${anchor_deposited_amount:,.2f}, '
+                         f' Triggering at: {config.trigger_at_percent}%, Borrow Limit target {config.target_percent}%.')
+            # print(line)
+            base_logger.info(run_stats)
 
-        # Check if we can pay from the wallet directly rather than get it from aUST (why would someone leave UST sitting in there ?)
-        get_balance_wallet_ust = balance.get('uusd')
-        should_get_from_anchor = True
-        if get_balance_wallet_ust:
-            get_balance_wallet_ust = int(get_balance_wallet_ust.amount / 1000000)
-            # leave 10 UST for fees and so on ...
-            if (get_balance_wallet_ust - 10) > repay_amount:
-                should_get_from_anchor = False
-                base_logger.info(f"Paying loan from {repay_amount} UST leftover in the wallet")
+        # If current_percent is bigger than trigger_at_percent, it means we need to repay!
+        if current_percent > trigger_at_percent:
+            repay_amount = int((current_percent - target_percent) / current_percent * loan_amount)
 
-        if should_get_from_anchor:
-            # Check if Anchor has funds to be withdrawn from
-            # This will query aUST which is not always matching the right amount UST deposited in Anchor for some reason...
-            if int(anchor_deposited_amount) >= int(repay_amount):
-                repay_amount = repay_amount
-            elif int(anchor_deposited_amount) > 10:
-                # If not enough deposited in Anchor withdraw whatever sitting there if bigger than $10
-                line = f"Not enough on Anchor ... Withdrawing ${anchor_deposited_amount:,.2f}"
-                # print(line)
-                base_logger.warning(line)
-                repay_amount = int(anchor_deposited_amount)
-            else:
-                # If less than $10 in Anchor, do nothing!
-                return False
-            # Finally withdraw form anchor ...
-            withdraw_from_anchor_tx = execute_withdraw_ust_from_anchor(repay_amount)
+            # Check if we can pay from the wallet directly rather than get it from aUST (why would someone leave UST sitting in there ?)
+            get_balance_wallet_ust = balance.get('uusd')
+            should_get_from_anchor = True
+            if get_balance_wallet_ust:
+                get_balance_wallet_ust = int(get_balance_wallet_ust.amount / 1000000)
+                # leave 10 UST for fees and so on ...
+                if (get_balance_wallet_ust - 10) > repay_amount:
+                    should_get_from_anchor = False
+                    base_logger.info(f"Paying loan from {repay_amount} UST leftover in the wallet")
+
+            if should_get_from_anchor:
+                # Check if Anchor has funds to be withdrawn from
+                # This will query aUST which is not always matching the right amount UST deposited in Anchor for some reason...
+                if int(anchor_deposited_amount) >= int(repay_amount):
+                    repay_amount = repay_amount
+                elif int(anchor_deposited_amount) > 10:
+                    # If not enough deposited in Anchor withdraw whatever sitting there if bigger than $10
+                    line = f"Not enough on Anchor ... Withdrawing ${anchor_deposited_amount:,.2f}"
+                    # print(line)
+                    base_logger.warning(line)
+                    repay_amount = int(anchor_deposited_amount)
+                else:
+                    # If less than $10 in Anchor, do nothing!
+                    return False
+                # Finally withdraw form anchor ...
+                withdraw_from_anchor_tx = execute_withdraw_ust_from_anchor(repay_amount)
+                sleep(0.5)
+
+            loan_repay_tx = execute_loan_repay(repay_amount)
             sleep(0.5)
 
-        loan_repay_tx = execute_loan_repay(repay_amount)
-        sleep(0.5)
-
-        if not check_tx_info(loan_repay_tx):
-            line = f"check_tx_info({loan_repay_tx}) was not found ... Maybe something went wrong ?"
-            # print(line)
-            base_logger.error(line)
-            line = f"Loan Repaid!!! Repay Amount: ${repay_amount:,.2f}, triggered at: {current_percent:.2%} ({config.trigger_at_percent}% trigger limit). TX: {tx_look_up}{loan_repay_tx}"
-            repay_logger.warning('TX 404 ... ' + line)
+            if not check_tx_info(loan_repay_tx):
+                line = f"check_tx_info({loan_repay_tx}) was not found ... Maybe something went wrong ?"
+                # print(line)
+                base_logger.error(line)
+                line = f"Loan Repaid!!! Repay Amount: ${repay_amount:,.2f}, triggered at: {current_percent:.2%} ({config.trigger_at_percent}% trigger limit). TX: {tx_look_up}{loan_repay_tx}"
+                repay_logger.warning('TX 404 ... ' + line)
+            else:
+                line = f"Loan Repaid!!! Repay Amount: ${repay_amount:,.2f}, triggered at: {current_percent:.2%} ({config.trigger_at_percent}% trigger limit). TX: {tx_look_up}{loan_repay_tx}"
+                # print(line)
+                repay_logger.info(line)
+                if config.NOTIFY_SLACK:
+                    slack_msg = f":money_with_wings: *Loan Repaid* :money_with_wings:\n\n_Repaid amount:_ `${repay_amount}`\n" \
+                                f"_Triggered at:_ `{current_percent:.2%}`\n" \
+                                f"_Borrow Limit trigger:_ `{config.trigger_at_percent}%`\n" \
+                                f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
+                                f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
+                    slack_webhook(slack_msg)
+                if config.NOTIFY_TELEGRAM:
+                    telegram_msg = f"*Loan Repaid*\n\n_Repaid amount:_ `${repay_amount}`\n" \
+                                f"_Triggered at:_ `{current_percent:.2%}`\n" \
+                                f"_Borrow Limit trigger:_ `{config.trigger_at_percent}%`\n" \
+                                f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
+                                f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
+                    telegram_notification(telegram_msg)
+                return line
         else:
-            line = f"Loan Repaid!!! Repay Amount: ${repay_amount:,.2f}, triggered at: {current_percent:.2%} ({config.trigger_at_percent}% trigger limit). TX: {tx_look_up}{loan_repay_tx}"
-            # print(line)
-            repay_logger.info(line)
-            if config.NOTIFY_SLACK:
-                slack_msg = f":money_with_wings: *Loan Repaid* :money_with_wings:\n\n_Repaid amount:_ `${repay_amount}`\n" \
-                            f"_Triggered at:_ `{current_percent:.2%}`\n" \
-                            f"_Borrow Limit trigger:_ `{config.trigger_at_percent}%`\n" \
-                            f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
-                            f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
-                slack_webhook(slack_msg)
-            if config.NOTIFY_TELEGRAM:
-                telegram_msg = f"*Loan Repaid*\n\n_Repaid amount:_ `${repay_amount}`\n" \
-                            f"_Triggered at:_ `{current_percent:.2%}`\n" \
-                            f"_Borrow Limit trigger:_ `{config.trigger_at_percent}%`\n" \
-                            f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
-                            f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
-                telegram_notification(telegram_msg)
-            return line
-    else:
-        # Does not need to act! We good!
-        return run_stats
+            # Does not need to act! We good!
+            return run_stats
+
+    except LCDResponseError as err:
+        base_logger.error(err)
+        pass
 
 
 if __name__ == '__main__':

@@ -19,7 +19,7 @@ def slack_webhook(msg):
     try:
         response = requests.post(
             config.SLACK_WEBHOOK_URL, data=json.dumps(slack_data),
-            headers={'Content-Type': 'application/json'}
+            headers={'Content-Type': 'application/json'}, timeout=5
         )
         if response.status_code != 200:
             raise ValueError(
@@ -35,7 +35,7 @@ def telegram_notification(msg):
 
     try:
         response = requests.post('https://api.telegram.org/bot' + config.TELEGRAM_TOKEN + '/sendMessage', data=json.dumps(tg_data),
-            headers={'Content-Type': 'application/json'}
+            headers={'Content-Type': 'application/json'}, timeout=5
         )
         if response.status_code != 200:
             raise ValueError(
