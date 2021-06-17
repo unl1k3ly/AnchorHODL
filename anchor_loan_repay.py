@@ -120,7 +120,6 @@ def borrow_ust_from_anchor(amount):
     fee_estimation = get_fee_estimation()
     base_logger.debug(f"Borrowing ${amount:,.2f} + ${int(fee_estimation) / 1000000:,.2f} fees from Anchor ...")
     amount = int((amount * 1000000) + int(fee_estimation))
-    test = '150000000'
 
     send = MsgExecuteContract(
         sender=wallet.key.acc_address,
@@ -133,8 +132,7 @@ def borrow_ust_from_anchor(amount):
         coins=Coins()
     ),
 
-    fee = str(int(fee_estimation) + 250000) + 'uusd'
-    sendtx = wallet.create_and_sign_tx(send, fee=StdFee(1000000, fee))
+    sendtx = wallet.create_and_sign_tx(send, gas_prices="0.15uusd", gas_adjustment=1.5)
     result = terra.tx.broadcast(sendtx)
 
     return result.txhash
@@ -147,7 +145,7 @@ def execute_loan_repay(amount):
     # Include fee also ...
     coin = Coin('uusd', amount + int(fee_estimation)).to_data()
     coins = Coins.from_data([coin])
-
+    
     # print(f"[~] Repaying ${amount / 1000000:,.2f} off the loan ...")
     send = MsgExecuteContract(
         sender=wallet.key.acc_address,
@@ -159,7 +157,12 @@ def execute_loan_repay(amount):
     ),
 
     fee = str(int(fee_estimation) + 250000) + 'uusd'
-    sendtx = wallet.create_and_sign_tx(send, fee=StdFee(1000000, fee))
+
+    if(config.repay_with_max_fee):
+        sendtx = wallet.create_and_sign_tx(send, fee=StdFee(1000000, fee))
+    else:
+        sendtx = wallet.create_and_sign_tx(send, gas_prices="0.15uusd", gas_adjustment=1.5)
+    
     result = terra.tx.broadcast(sendtx)
 
     return result.txhash
@@ -309,3 +312,4 @@ if __name__ == '__main__':
         base_logger.error("Oh no!!! Something went wrong! - keep_loan_safe() returned empty.")
     else:
         print(f"[+] {datetime.now():%d-%m-%Y %H:%M:%S} -> {keep_loan_safe}")
+
