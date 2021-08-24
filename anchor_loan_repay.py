@@ -109,7 +109,7 @@ def execute_withdraw_ust_from_anchor(amount):
         coins=Coins()
     ),
 
-    fee = str(int(fee_estimation) + 250000) + 'uusd'
+    fee = str(int(fee_estimation) + 500000) + 'uusd'
     sendtx = wallet.create_and_sign_tx(send, fee=StdFee(1000000, fee))
     result = terra.tx.broadcast(sendtx)
 
@@ -133,7 +133,7 @@ def borrow_ust_from_anchor(amount):
         coins=Coins()
     ),
 
-    fee = str(int(fee_estimation) + 250000) + 'uusd'
+    fee = str(int(fee_estimation) + 500000) + 'uusd'
     sendtx = wallet.create_and_sign_tx(send, fee=StdFee(1000000, fee))
     result = terra.tx.broadcast(sendtx)
 
@@ -158,7 +158,7 @@ def execute_loan_repay(amount):
         coins=coins
     ),
 
-    fee = str(int(fee_estimation) + 250000) + 'uusd'
+    fee = str(int(fee_estimation) + 500000) + 'uusd'
     sendtx = wallet.create_and_sign_tx(send, fee=StdFee(1000000, fee))
     result = terra.tx.broadcast(sendtx)
 
