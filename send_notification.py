@@ -44,3 +44,20 @@ def telegram_notification(msg):
             )
     except Exception:
         pass
+
+def discord_notification(msg):
+    headers = {
+        "Authorization": "Bot {}".format(config.DISCORD_BOT_TOKEN),
+        "Content-Type": "application/json",
+    }
+    channel_id = config.DISCORD_CHANNEL_ID
+    r = requests.post(
+        "https://discordapp.com/api/channels/" + config.DISCORD_CHANNEL_ID + "/messages",
+        headers=headers,
+        json={"content": msg},
+    )
+
+    try:
+        r.raise_for_status()
+    except Exception:
+        pass

@@ -12,7 +12,7 @@ import logging_config
 from contact_addresses import contact_addresses
 import config
 from datetime import datetime
-from send_notification import slack_webhook, telegram_notification
+from send_notification import slack_webhook, telegram_notification, discord_notification
 import os
 import logging.config
 
@@ -225,6 +225,11 @@ def keep_loan_safe():
                                 f"_Triggered at:_ `{current_percent:.2%}`\n" \
                                 f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
                     telegram_notification(telegram_msg)
+                if config.NOTIFY_DISCORD:
+                    discord_msg = f"*Borrowed More!*\n\n_Borrowed amount:_ `${borrow_amount}`\n" \
+                                f"_Triggered at:_ `{current_percent:.2%}`\n" \
+                                f"TX: [{borrow_tx}]({tx_look_up}{borrow_tx})"
+                    discord_notification(discord_msg)
 
         else:
             run_stats = (f'Left until trigger: {left_to_trigger}%, Current at: {current_percent:.2%},'
@@ -292,6 +297,13 @@ def keep_loan_safe():
                                 f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
                                 f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
                     telegram_notification(telegram_msg)
+                if config.NOTIFY_DISCORD:
+                    discord_msg = f"*Loan Repaid*\n\n_Repaid amount:_ `${repay_amount}`\n" \
+                                f"_Triggered at:_ `{current_percent:.2%}`\n" \
+                                f"_Borrow Limit trigger:_ `{config.trigger_at_percent}%`\n" \
+                                f"_Borrow Limit target:_ `{config.target_percent}%`\n" \
+                                f"TX: [{loan_repay_tx}]({tx_look_up}{loan_repay_tx})"
+                    discord_notification(discord_msg)
                 return line
         else:
             # Does not need to act! We good!
