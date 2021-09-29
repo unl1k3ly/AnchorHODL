@@ -1,21 +1,7 @@
 from terra_sdk.client.lcd import LCDClient
 from terra_sdk.key.mnemonic import MnemonicKey
-from terra_sdk.exceptions import LCDResponseError
-from terra_sdk.key.raw import RawKey
-from terra_sdk.core.auth import StdFee
-from terra_sdk.core.bank import MsgSend
-from terra_sdk.core.coins import Coins
-from terra_sdk.core.coins import Coin
-from terra_sdk.core.gov.data import Content
-from terra_sdk.core.auth import StdFee
-from terra_sdk.core.bank import MsgSend
-from terra_sdk.core.wasm import MsgExecuteContract
 import requests
 from time import sleep, time
-from datetime import datetime
-import logging
-import sys
-import json
 from contact_addresses import contact_addresses
 import config
 import anchorprotocol

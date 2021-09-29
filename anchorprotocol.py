@@ -1,5 +1,4 @@
 import time
-
 from terra_sdk.client.lcd import LCDClient
 from terra_sdk.key.mnemonic import MnemonicKey
 from terra_sdk.core.coins import Coins
@@ -9,7 +8,6 @@ from terra_sdk.core.bank import MsgSend
 from terra_sdk.core.wasm import MsgExecuteContract
 from terra_sdk.exceptions import LCDResponseError
 from time import sleep
-
 import logging_config
 from contact_addresses import contact_addresses
 import config

@@ -3,7 +3,6 @@ import os
 import subprocess
 from flask import Response, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
-from anchor_loan_repay import keep_loan_safe
 from terraswap_swap_watch import run_terra_swap_price_watcher, get_luna_price_prices
 from hodl import Terra
 
