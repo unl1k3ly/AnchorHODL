@@ -7,8 +7,8 @@ from terraswap_swap_watch import run_terra_swap_price_watcher, get_luna_price_pr
 from hodl import Terra
 
 # I hope you are not reading this source! This "API" is really not ideal but it work!
-# I wish i had the time to do better! Apologies for this nasty laziness subprocess usage!
-# Enjoy it
+# Apologies for this nasty laziness subprocess usage!
+# Enjoy it!!
 
 app = Flask(__name__)
 hodl = Terra()
