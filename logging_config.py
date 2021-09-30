@@ -5,41 +5,33 @@ LOGGING = {
     'formatters': {
         'standard': {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
-            'datefmt': '%d-%m-%Y %H:%M:%S',
+            'datefmt': '%d-%m-%Y %H:%M:%S '
+        },
+        'repay_logger_format': {
+            'format': '%(asctime)s %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S '
         },
         'info_logger_format': {
             'format': '%(asctime)s %(message)s',
-            'datefmt': '%d-%m-%Y %H:%M:%S'
-        },
-        'colored': {
-            '()': 'colorlog.ColoredFormatter',
-            'format': "%(asctime)s - %(name)s: %(log_color)s%(levelname)-4s%(reset)s %(blue)s%(message)s",
-            'datefmt': '%d-%m-%Y %H:%M:%S'
-
+            'datefmt': '%d-%m-%Y %H:%M:%S '
         },
     },
     'handlers': {
         'default': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/info.log',
+            'filename': 'logs/default.log',
             'maxBytes': 1024*1024*5,  # 5MB
             'backupCount': 5,
-            'formatter': 'standard',
+            'formatter': 'standard'
         },
-        'debug_console_handler': {
-            'level': 'DEBUG',
-            'formatter': 'colored',
-            'class': 'logging.StreamHandler',
-            'stream': 'ext://sys.stdout',
-        },
-        'repaying': {
+        'repay_logger': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/repayments.log',
-            'maxBytes': 1024 * 1024 * 5,  # 5MB
+            'filename': 'logs/repay.log',
+            'maxBytes': 1024*1024*5,  # 5MB
             'backupCount': 5,
-            'formatter': 'info_logger_format'
+            'formatter': 'repay_logger_format'
         },
         'apscheduler': {
             'level': 'INFO',
@@ -55,15 +47,23 @@ LOGGING = {
             'maxBytes': 1024 * 1024 * 5,  # 5MB
             'backupCount': 5,
         },
+        'info_logger': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/info.log',
+            'maxBytes': 1024 * 1024 * 5,  # 5MB
+            'backupCount': 5,
+            'formatter': 'info_logger_format'
+        },
     },
     'loggers': {
         '': {
-            'handlers': ['default', 'debug_console_handler'],
+            'handlers': ['default'],
             'level': 'INFO',
             'propagate': True,
         },
-        'repaying': {
-            'handlers': ['repaying'],
+        'repay_logger': {
+            'handlers': ['repay_logger'],
             'level': 'INFO',
             'propagate': False,
         },
@@ -77,8 +77,14 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'info_logger': {
+            'handlers': ['info_logger'],
+            'level': 'INFO',
+            'propagate': False,
+        },
         'urllib3.connectionpool': {
             'level': 'WARNING',
         }
     },
 }
+

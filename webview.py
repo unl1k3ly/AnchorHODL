@@ -3,18 +3,14 @@ import os
 import subprocess
 from flask import Response, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
+from anchor_loan_repay import keep_loan_safe
 from terraswap_swap_watch import run_terra_swap_price_watcher, get_luna_price_prices
-from hodl import Terra
 
-# I hope you are not reading this source! This "API" is really not ideal but it work!
-# I wish i had the time to do better! Apologies for this nasty laziness subprocess usage!
-# Enjoy it
 
 app = Flask(__name__)
-hodl = Terra()
 
 scheduler = BackgroundScheduler(daemon=True)
-scheduler .add_job(hodl.is_loan_safe, 'interval', seconds=30)
+scheduler .add_job(keep_loan_safe, 'interval', seconds=30)
 # scheduler .add_job(process_notifications, 'interval', minutes=3)
 scheduler .start()
 
@@ -38,7 +34,7 @@ def tail():
         # get the last "left to trigger"
         try:
             if 'Left until trigger: ' in info_log[-1]:
-                page_title = info_log[-1].split()[7].strip(',')
+                page_title = info_log[-1].split()[5].strip(',')
             elif 'REPAYING' in info_log[-1]:
                 page_title = 'REPAYING ...'
             else:
@@ -47,8 +43,8 @@ def tail():
             page_title = '...'
             pass
 
-        if os.path.exists('./logs/repayments.log'):
-            arguments = ['tail', '-n', '5', './logs/repayments.log']
+        if os.path.exists('./logs/repay.log'):
+            arguments = ['tail', '-n', '5', './logs/repay.log']
             process = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
             for line in iter(process.stdout.readline, b''):
