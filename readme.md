@@ -1,3 +1,10 @@
+## Support!
+- If you feel this project is the right one for you, please, donate to `terra1uwkfuh6crvlttqsj2rv0tjpl8v0dy3d4swayg7` if you feel like doing so.
+
+Thanks Terra and Anchor team!
+
+Cheers all!
+
 ## Why
 My day job requires a fairly good amount of automation from time to time. Besides, I do like computers to work on what I cannot while I'm sleeping!
 
@@ -18,7 +25,8 @@ I've started this app due my own needs and to learn more about Terra's ecosystem
 2. Rename `config.py.sample` to  `config.py`.
 3. Change `config.py` as you desire and feed your seed *(a dedicated wallet is recommended)*.
 4. Run  `pip3  install -r requirements.txt`
-5. Run `python3 webview.py` and simply browsing to http://localhost:5000 for  an auto-pay/borrow running every 30 seconds. **OR** Run `python3 anchor_loan_repay.py` once or use a while loop to run evey 30 seconds `while true; do python3 anchor_loan_repay.py; sleep 30; done`
+5. Run `python3 webview.py` and simply browsing to http://localhost:5000 for  an auto-pay/borrow running every 30 seconds. 
+**OR** Run `python3 hold.py`
 
 ![installing](./imgs/download.gif)
 
@@ -37,9 +45,6 @@ Done! gunicorn is running as daemon!
 6. Check if its working by `http://localhost:5000`
 
 ## Screenshots 
-
-- You can run the script in your terminal in a tmux/screen session as per figure below:
-![Webview](./imgs/while_true.png)
 
 - Or (recommended) you can spin a web service that does everything for you after you ran `python3 webview.py`
 ![Webview](./imgs/web_view.png)
@@ -74,14 +79,6 @@ If  these instructions are unclear, just Google "How to create a Telegram Bot an
 - I have no intentions to actively develop new features or take issue requests. As mentioned, this automation was to address a self issue I had and consequently avoid liquidation! It works for my own needs.
 - I'm happy to fix bugs or take merge requests.
 - If you intend to modify the code yourself, please do a fork and start from it !
-
-
-## Support!
-- If you feel this project is the right one for you, please, donate to `terra1uwkfuh6crvlttqsj2rv0tjpl8v0dy3d4swayg7` if you feel like doing so.
-
-Thanks Terra and Anchor team!
-
-Cheers all!
 
 ## Similar projects
 - https://github.com/ALPAC-4/auto_repay
