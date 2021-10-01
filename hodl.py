@@ -76,12 +76,20 @@ class Terra:
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            anchor_hodl = Terra()
-            anchor_hodl.is_loan_safe()
-            sleep(30)
-        except Exception as err:
-            logger.error(err)
-            pass
+    try:
+        anchor_hodl = Terra()
+        anchor_hodl.is_loan_safe()
+    except Exception as err:
+        logger.error(err)
+        pass
+
+
+    # while True:
+    #     try:
+    #         anchor_hodl = Terra()
+    #         anchor_hodl.is_loan_safe()
+    #         sleep(30)
+    #     except Exception as err:
+    #         logger.error(err)
+    #         pass
 
