@@ -4,7 +4,8 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+            'format': '%(asctime)s [%(levelname)s] %(message)s',
+            # 'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
             'datefmt': '%d-%m-%Y %H:%M:%S',
         },
         'info_logger_format': {
@@ -13,7 +14,8 @@ LOGGING = {
         },
         'colored': {
             '()': 'colorlog.ColoredFormatter',
-            'format': "%(asctime)s - %(name)s: %(log_color)s%(levelname)-4s%(reset)s %(blue)s%(message)s",
+            # 'format': "%(asctime)s - %(name)s: %(log_color)s%(levelname)-4s%(reset)s %(blue)s%(message)s",
+            'format': "%(asctime)s - %(log_color)s%(levelname)-4s%(reset)s %(blue)s%(message)s",
             'datefmt': '%d-%m-%Y %H:%M:%S'
 
         },

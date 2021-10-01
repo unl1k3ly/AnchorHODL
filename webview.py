@@ -38,7 +38,7 @@ def tail():
         # get the last "left to trigger"
         try:
             if 'Left until trigger: ' in info_log[-1]:
-                page_title = info_log[-1].split()[7].strip(',')
+                page_title = info_log[-1].split()[6].strip(',')
             elif 'REPAYING' in info_log[-1]:
                 page_title = 'REPAYING ...'
             else:
