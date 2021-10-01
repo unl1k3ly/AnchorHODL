@@ -26,7 +26,7 @@ def get_terra_gas_prices():
 class Terra:
     def __init__(self):
         if config.NETWORK == 'MAINNET':
-            self.chain_id = 'columbus-4'
+            self.chain_id = 'columbus-5'
             self.public_node_url = 'https://lcd.terra.dev'
             # self.public_node_url = 'http://192.168.130.2:1317'
             self.tx_look_up = f'https://finder.terra.money/{self.chain_id}/tx/'
