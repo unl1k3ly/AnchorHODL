@@ -194,7 +194,7 @@ def get_ltv(anchor_hodl):
 
 def format_action_current_ltv(current_ltv):
     format = f"Left until trigger: {current_ltv['left_to_trigger']}%, " \
-             f"Current at: {current_ltv['current_percent']:.3%}, " \
+             f"Current at: {current_ltv['current_percent']:.2%}, " \
              f"Triggering at: {config.trigger_at_percent}%, " \
              f"Borrow Limit target: {config.target_percent}%"
 
