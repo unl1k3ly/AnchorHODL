@@ -27,9 +27,7 @@ I've started this app due my own needs and to learn more about Terra's ecosystem
 4. Run  `pip3  install -r requirements.txt`
 5. Run `python3 webview.py` and simply browsing to http://localhost:5000 for  an auto-pay/borrow running every 30 seconds. 
 **OR** Run `python3 hold.py`
-
-![installing](./imgs/download.gif)
-
+   
 ## Persistence mode
 1. Install gunicorn: `pip3 install gunicorn`
 2. Run `gunicorn -b 127.0.0.1:5000 webview:app --daemon`

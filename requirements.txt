@@ -2,3 +2,4 @@ terra-sdk @ git+https://github.com/terra-money/terra-sdk-python.git@32f65fd08c2c
 requests
 Flask
 apscheduler
+colorlog
