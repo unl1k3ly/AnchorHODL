@@ -116,11 +116,14 @@ def keep_loan_safe(anchor_hodl, current_ltv):
 
                 # Depsoit ust into anchor earn after borrowing
                 deposit_amount = borrow_amount - 10 # always increase + 10 to cover fees
-                execute_deposit = anchor_execute_deposit_earn(anchor_hodl, deposit_amount)
-                broadcast_result = anchor_hodl.terra.tx.broadcast(execute_deposit)
-                deposit_log = f"Deposited! Total Amount: ${deposit_amount:,.2f}, "
-                logger.info(deposit_log)
+                if deposit_amount > 0:
+                    execute_deposit = anchor_execute_deposit_earn(anchor_hodl, deposit_amount)
+                    broadcast_result = anchor_hodl.terra.tx.broadcast(execute_deposit)
+                    deposit_log = f"Deposited! Total Amount: ${deposit_amount:,.2f}, "
+                else:
+                    deposit_log = "Not enough to deposit"
 
+                logger.info(deposit_log)
             return True
 
     except Exception as err:
