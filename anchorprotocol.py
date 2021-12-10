@@ -108,18 +108,22 @@ def keep_loan_safe(anchor_hodl, current_ltv):
                     current_ltv['loan_amount'])
                 execute_borrow = anchor_execute_borrow_ust(anchor_hodl, borrow_amount)
                 broadcast_result = anchor_hodl.terra.tx.broadcast(execute_borrow)
-                borrow_log = f"Borrowed! Total Amount: ${borrow_amount:,.2f}, " \
-                             f"triggered at: {current_ltv['left_to_trigger']} " \
-                             f"({config.trigger_at_percent}% trigger limit). " \
-                             f"TX: {anchor_hodl.tx_look_up}{broadcast_result.txhash}"
-                logger.info(borrow_log)
+                time.sleep(2)
+                if broadcast_result.txhash:
+                    borrow_log = f"Borrowed! Total Amount: ${borrow_amount:,.2f}, " \
+                                f"triggered at: {current_ltv['left_to_trigger']} " \
+                                f"({config.trigger_at_percent}% trigger limit). " \
+                                f"TX: {anchor_hodl.tx_look_up}{broadcast_result.txhash}"
+                    logger.info(borrow_log)
 
                 # Depsoit ust into anchor earn after borrowing
                 deposit_amount = borrow_amount - 10 # always increase + 10 to cover fees
                 if deposit_amount > 0:
                     execute_deposit = anchor_execute_deposit_earn(anchor_hodl, deposit_amount)
                     broadcast_result = anchor_hodl.terra.tx.broadcast(execute_deposit)
-                    deposit_log = f"Deposited! Total Amount: ${deposit_amount:,.2f}, "
+                    time.sleep(2)
+                    if broadcast_result.txhash:
+                       deposit_log = f"Deposited! Total Amount: ${deposit_amount:,.2f}, "
                 else:
                     deposit_log = "Not enough to deposit"
 
