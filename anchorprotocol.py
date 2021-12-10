@@ -123,9 +123,10 @@ def keep_loan_safe(anchor_hodl, current_ltv):
                     broadcast_result = anchor_hodl.terra.tx.broadcast(execute_deposit)
                     time.sleep(2)
                     if broadcast_result.txhash:
-                       deposit_log = f"Deposited! Total Amount: ${deposit_amount:,.2f}, "
+                       deposit_log = f"Deposited! Total Amount: ${deposit_amount:,.2f}, "\
+                                     f"TX: {anchor_hodl.tx_look_up}{broadcast_result.txhash}"
                 else:
-                    deposit_log = "Not enough to deposit"
+                    deposit_log = "Deposit Skipped! Not enough borrowed to deposit."
 
                 logger.info(deposit_log)
             return True
