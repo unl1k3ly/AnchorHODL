@@ -287,7 +287,7 @@ def anchor_execute_deposit_earn(anchor_hodl, amount):
     contract_address = anchor_hodl.mmMarket
     msg = {"deposit_stable": {}}
 
-    tx_return = anchor_hodl.contract_executor(anchor_hodl, contract_address, msg, coins)
+    tx_return = contract_executor(anchor_hodl, contract_address, msg, coins)
 
     return tx_return
 
