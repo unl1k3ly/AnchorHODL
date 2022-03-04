@@ -109,12 +109,27 @@ def keep_loan_safe(anchor_hodl, current_ltv):
                     current_ltv['loan_amount'])
                 execute_borrow = anchor_execute_borrow_ust(anchor_hodl, borrow_amount)
                 broadcast_result = anchor_hodl.terra.tx.broadcast(execute_borrow)
-                borrow_log = f"Borrowed! Total Amount: ${borrow_amount:,.2f}, " \
-                             f"triggered at: {current_ltv['left_to_trigger']} " \
-                             f"({config.trigger_at_percent}% trigger limit). " \
-                             f"TX: {anchor_hodl.tx_look_up}{broadcast_result.txhash}"
-                logger.info(borrow_log)
+                time.sleep(2)
+                if broadcast_result.txhash:
+                    borrow_log = f"Borrowed! Total Amount: ${borrow_amount:,.2f}, " \
+                                f"triggered at: {current_ltv['left_to_trigger']} " \
+                                f"({config.trigger_at_percent}% trigger limit). " \
+                                f"TX: {anchor_hodl.tx_look_up}{broadcast_result.txhash}"
+                    logger.info(borrow_log)
 
+                # Depsoit ust into anchor earn after borrowing
+                deposit_amount = borrow_amount - 10 # always increase + 10 to cover fees
+                if deposit_amount > 0:
+                    execute_deposit = anchor_execute_deposit_earn(anchor_hodl, deposit_amount)
+                    broadcast_result = anchor_hodl.terra.tx.broadcast(execute_deposit)
+                    time.sleep(2)
+                    if broadcast_result.txhash:
+                       deposit_log = f"Deposited! Total Amount: ${deposit_amount:,.2f}, "\
+                                     f"TX: {anchor_hodl.tx_look_up}{broadcast_result.txhash}"
+                else:
+                    deposit_log = "Deposit Skipped! Not enough borrowed to deposit."
+
+                logger.info(deposit_log)
             return True
 
     except Exception as err:
@@ -272,6 +287,18 @@ def anchor_execute_borrow_ust(anchor_hodl, amount):
 
     return anchor_execute_loan_repay_tx
 
+def anchor_execute_deposit_earn(anchor_hodl, amount):
+    # Deposit UST into anchor earn
+    amount = int(amount * 1000000)
+    coin = Coin("uusd", amount).to_data()
+    coins = Coins.from_data([coin])
+
+    contract_address = anchor_hodl.mmMarket
+    msg = {"deposit_stable": {}}
+
+    tx_return = contract_executor(anchor_hodl, contract_address, msg, coins)
+
+    return tx_return
 
 def contract_executor(anchor_hodl, contract_addr, execute_msg, send_coins):
     # sequence = anchor_hodl.wallet.sequence()
