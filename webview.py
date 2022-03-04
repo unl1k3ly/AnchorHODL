@@ -78,9 +78,9 @@ def tail():
     else:
         return "Could not read info.log"
 
-    terraswap_prices = run_terra_swap_price_watcher()
+    # terraswap_prices = run_terra_swap_price_watcher()
 
-    luna_prices = get_luna_price_prices()
+    # luna_prices = get_luna_price_prices()
 
     # Reverse all lists ...
     info_log.reverse()
@@ -88,7 +88,9 @@ def tail():
     apscheduler_log.reverse()
 
     return render_template('index.html', title=page_title, buffer_list=info_log, repay_list=repay_log,
-                           terraswap_prices=terraswap_prices, luna_price=luna_prices, apscheduler_list=apscheduler_log)
+                           # terraswap_prices=terraswap_prices,
+                           # luna_price=luna_prices,
+                           apscheduler_list=apscheduler_log)
     # return Response(json.dumps(buffer),  mimetype='application/json')
 
 
