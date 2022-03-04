@@ -3,7 +3,8 @@ from terra_sdk.client.lcd import LCDClient
 from terra_sdk.key.mnemonic import MnemonicKey
 from terra_sdk.core.coins import Coins
 from terra_sdk.core.coins import Coin
-from terra_sdk.core.auth import StdFee
+from terra_sdk.core.fee import Fee
+from terra_sdk.client.lcd.api.tx import CreateTxOptions
 from terra_sdk.core.bank import MsgSend
 from terra_sdk.core.wasm import MsgExecuteContract
 from terra_sdk.exceptions import LCDResponseError
@@ -44,7 +45,7 @@ def keep_loan_safe(anchor_hodl, current_ltv):
             # check user balance and if has enough for repay
             balance = anchor_hodl.get_account_native_balance()
 
-            min_amount_in_wallet = balance.get('uusd').sub(repay_amount_required * 1000000).amount / 1000000
+            min_amount_in_wallet = balance[0].get('uusd').sub(repay_amount_required * 1000000).amount / 1000000
             if min_amount_in_wallet > 10:  # Always keep at least $10 sitting in the wallet
                 execute_repay = anchor_execute_loan_repay(anchor_hodl, repay_amount_required)
                 broadcast_result = anchor_hodl.terra.tx.broadcast(execute_repay)
@@ -283,11 +284,7 @@ def contract_executor(anchor_hodl, contract_addr, execute_msg, send_coins):
     )
     try:
         tx = anchor_hodl.wallet.create_and_sign_tx(
-            msgs=[execute],
-            fee=StdFee(600000, "2500000uusd"),
-            memo="AnchorHODL!",
-            # fee_denoms=["uusd"],
-            # sequence=sequence
+            CreateTxOptions(msgs=[execute], fee=Fee(600000, "2500000uusd"), memo="AnchorHODL!")
         )
         return tx
 

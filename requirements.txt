@@ -1,4 +1,4 @@
-terra-sdk @ git+https://github.com/terra-money/terra-sdk-python.git@32f65fd08c2c3aa707b0f5242230b5ec8ac9b884
+terra-sdk==2.0.3
 requests
 Flask
 apscheduler
